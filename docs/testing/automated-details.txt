@@ -1,0 +1,930 @@
+==================== Database rules (constraints) (com.bms.database.SchemaCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Negative stock is rejected
+      database said: [SQLITE_CONSTRAINT_CHECK] A CHECK constraint failed (CHECK constraint failed: quantity_in_stock >= 0)
+PASS: Negative price is rejected
+      database said: [SQLITE_CONSTRAINT_CHECK] A CHECK constraint failed (CHECK constraint failed: price_cents >= 0)
+PASS: Order for a customer that does not exist is rejected (foreign key)
+      database said: [SQLITE_CONSTRAINT_FOREIGNKEY] A foreign key constraint failed (FOREIGN KEY constraint failed)
+PASS: Duplicate username is rejected, even in capital letters
+      database said: [SQLITE_CONSTRAINT_UNIQUE] A UNIQUE constraint failed (UNIQUE constraint failed: users.username)
+PASS: Unknown role is rejected
+      database said: [SQLITE_CONSTRAINT_CHECK] A CHECK constraint failed (CHECK constraint failed: role IN ('ADMIN', 'EMPLOYEE'))
+
+5 of 5 checks passed.
+
+==================== Login and passwords (com.bms.service.AuthServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Empty username is rejected   (message: Please enter both your username and password.)
+PASS: Empty password is rejected   (message: Please enter both your username and password.)
+PASS: Unknown username is rejected   (message: Invalid username or password.)
+PASS: Wrong password is rejected   (message: Invalid username or password.)
+PASS: Admin logs in with the correct password   (role: ADMIN)
+PASS: Session knows the employee behind the admin account
+PASS: Admin passes the administrator check
+PASS: Admin may open Reports
+PASS: After logout nobody is logged in
+PASS: Username is not case-sensitive   (role: ADMIN)
+PASS: Employee logs in   (role: EMPLOYEE)
+PASS: Employee is stopped by the administrator check
+PASS: Employee may open Customers
+PASS: Employee may NOT open Reports
+PASS: Employee may NOT open Suppliers
+
+15 of 15 checks passed.
+
+==================== Dashboard (com.bms.service.DashboardServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: 68498 cents is shown as R684.98
+PASS: 123456789 cents is shown as R1,234,567.89
+PASS: 0 cents is shown as R0.00
+PASS: Dashboard refuses a user who is not logged in
+
+Administrator dashboard: customers=2, products=5, employees=2, orders=2, revenue=R6,615.96, low stock=1
+
+PASS: Administrator gets the full view
+PASS: Customer total matches the database
+PASS: Product total matches the database
+PASS: Employee total matches the database
+PASS: Order total matches the database
+PASS: Revenue matches the sum of the order items
+PASS: Low-stock total matches the products table
+PASS: Low-stock list is no longer than the count
+PASS: Recent orders are newest first
+PASS: Employee gets the limited view
+PASS: Employee does not receive employee, order or revenue totals
+PASS: Employee still sees customers and products totals
+PASS: Employee sees no recent-customers list
+PASS: Employee sees only their OWN orders
+
+18 of 18 checks passed.
+
+==================== Customers (com.bms.service.CustomerServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Customers are refused when nobody is logged in
+PASS: Employee can add a customer
+PASS: Search finds the new customer by first name
+PASS: Search finds the new customer by email
+PASS: Search finds the new customer by phone
+PASS: Search finds the new customer by full name
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character, not a wildcard
+PASS: Edit changes the surname
+PASS: Employee cannot delete a customer
+PASS: First name is required
+PASS: Last name is required
+PASS: A bad email is refused
+PASS: A bad phone (letters) is refused
+PASS: A too-short phone is refused
+PASS: A too-long name is refused
+PASS: Email and phone may be left empty
+PASS: Same email (any capitals) is flagged as a possible duplicate
+PASS: Same phone is flagged as a possible duplicate
+PASS: A different email and phone is not flagged
+PASS: A customer is not flagged as a duplicate of themselves
+PASS: Two customers with no email/phone are not flagged as duplicates
+PASS: Administrator can delete a customer with no orders
+PASS: The deleted customer is only hidden, not erased (row still in the database)
+PASS: A customer who has orders cannot be deleted
+PASS: ...and is still listed afterwards
+PASS: Deleting a customer that does not exist gives a clear error
+
+27 of 27 checks passed.
+ALL CHECKS PASSED.
+
+==================== Products (com.bms.service.ProductServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: "129.99" becomes 12999 cents
+PASS: "R129.99" becomes 12999 cents
+PASS: "R 1 200.5" becomes 120050 cents
+PASS: "120" becomes 12000 cents
+PASS: "0" is allowed (a free item)
+PASS: An empty price is refused
+PASS: Letters in the price are refused
+PASS: A negative price is refused
+PASS: A comma in the price is refused
+PASS: Three decimals are refused
+PASS: A whole number such as 25 is accepted
+PASS: A decimal stock quantity is refused
+PASS: A negative stock quantity is refused
+PASS: An empty quantity is refused
+PASS: Products are refused when nobody is logged in
+PASS: Employee can view the products
+PASS: Search by name finds the USB drive
+PASS: Search by category text finds Stationery items
+PASS: Search by supplier name finds that supplier's products
+PASS: Category filter returns only that category
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character
+PASS: The category list has no repeats
+PASS: Employee cannot add a product
+PASS: Employee cannot edit a product
+PASS: Employee cannot delete a product
+PASS: Employee cannot even validate a product form
+PASS: There are suppliers to choose from
+PASS: Administrator can add a product
+PASS: The saved product has the right price
+PASS: The saved product shows its supplier name
+PASS: 20 in stock with reorder level 5 is IN STOCK
+PASS: Starting stock was recorded as an 'Initial stock' adjustment
+PASS: 3 in stock with reorder level 5 is LOW STOCK
+PASS: 0 in stock is OUT OF STOCK
+PASS: A product that starts with 0 stock gets no stock adjustment line
+PASS: The new category appears once in the category list
+PASS: Product can be saved without category, description or supplier
+PASS: A price of 0 can be saved
+PASS: A name is required
+PASS: A too-long name is refused
+PASS: A negative price is refused by the service
+PASS: A price above R10,000,000 is refused
+PASS: Negative stock is refused
+PASS: A negative reorder level is refused
+PASS: A supplier that does not exist is refused
+PASS: A too-long description is refused
+PASS: The same name (different capitals) is refused
+PASS: Saving a product under its own name is allowed
+PASS: Renaming to another product's name is refused
+PASS: Edit changes the name, price and reorder level
+PASS: Edit does NOT change the stock quantity (still 20)
+PASS: Edit can remove the supplier
+PASS: Editing a product that does not exist gives a clear error
+PASS: A product that is on an order cannot be deleted
+PASS: ...and is still listed afterwards
+PASS: Administrator can delete a product that was never ordered
+PASS: The deleted product is only hidden (row still in the database)
+PASS: A deleted product's name can be used again
+PASS: Deleting a product that does not exist gives a clear error
+
+60 of 60 checks passed.
+ALL CHECKS PASSED.
+
+==================== Suppliers (com.bms.service.SupplierServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Suppliers are refused when nobody is logged in
+PASS: Employee cannot view suppliers
+PASS: Employee cannot add a supplier
+PASS: Employee cannot edit a supplier
+PASS: Employee cannot delete a supplier
+PASS: Employee cannot validate a supplier form
+PASS: Administrator can view the suppliers
+PASS: TechSource shows 2 products
+PASS: OfficeWorld shows 3 products
+PASS: A supplier that provides products cannot be deleted
+PASS: ...and is still listed afterwards
+PASS: Administrator can add a supplier
+PASS: Search finds it by name
+PASS: Search finds it by contact person
+PASS: Search finds it by email
+PASS: Search finds it by phone
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character
+PASS: A new supplier has 0 products
+PASS: Contact, email, phone and address were saved
+PASS: Only the name is required (other fields may be empty)
+PASS: A name is required
+PASS: A too-long name is refused
+PASS: A bad email is refused
+PASS: A bad phone (letters) is refused
+PASS: A too-short phone is refused
+PASS: A too-long contact person is refused
+PASS: A too-long address is refused
+PASS: The same name (different capitals) is refused
+PASS: Saving a supplier under its own name is allowed
+PASS: Renaming to another supplier's name is refused
+PASS: Edit changes the name and contact person
+PASS: Edit can clear the email, phone and address
+PASS: Editing a supplier that does not exist gives a clear error
+PASS: A new supplier appears in the product form's supplier list
+PASS: A product using the supplier raises its product count to 1
+PASS: A supplier with a product cannot be deleted
+PASS: Once the product is deleted, the count drops to 0
+PASS: Administrator can delete a supplier with no products
+PASS: The deleted supplier is only hidden (row still in the database)
+PASS: A deleted supplier no longer appears in the product form's list
+PASS: A deleted supplier's name can be used again
+PASS: Deleting a supplier that does not exist gives a clear error
+
+43 of 43 checks passed.
+ALL CHECKS PASSED.
+
+==================== Employees and user accounts (com.bms.service.EmployeeServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Employees are refused when nobody is logged in
+PASS: Employee cannot view the employee list
+PASS: Employee cannot add an employee
+PASS: Employee cannot edit an employee
+PASS: Employee cannot deactivate anyone
+PASS: Employee cannot reactivate anyone
+PASS: Employee cannot reset a password
+PASS: Employee cannot validate an employee form
+PASS: Administrator can view the employees
+PASS: The admin account shows the Administrator role
+PASS: Thandi shows the Employee role
+PASS: You cannot deactivate your own account
+PASS: ...and you are still active afterwards
+PASS: You cannot change your own role
+PASS: ...and your role is unchanged
+PASS: Administrator can add an employee
+PASS: Search finds it by name
+PASS: Search finds it by username
+PASS: Search finds it by email
+PASS: Search finds it by phone
+PASS: Search finds it by position
+PASS: Search finds it by department
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character
+PASS: All details were saved
+PASS: Only name, username, role and password are required
+PASS: The new employee can log in with the password that was set
+PASS: ...and sees the employee role (not admin)
+PASS: ...and that new employee cannot open the employee list
+PASS: The password is stored hashed, not as plain text
+PASS: Empty first name is refused
+PASS: Empty last name is refused
+PASS: Digits in a name are refused
+PASS: A name longer than 50 characters is refused
+PASS: Names with an apostrophe or hyphen are allowed
+PASS: Bad email is refused
+PASS: Email already used by another active employee is refused
+PASS: Bad phone is refused
+PASS: Hire date in the wrong format is refused
+PASS: A date that does not exist (2026-02-30) is refused
+PASS: A hire date in the future is refused
+PASS: A hire date before 1950 is refused
+PASS: A role is required
+PASS: Username is required
+PASS: A username shorter than 3 characters is refused
+PASS: A username with a space is refused
+PASS: A username already taken is refused (capital letters ignored)
+PASS: The username 'admin' is taken
+PASS: A password shorter than 8 characters is refused
+PASS: A password with no number is refused
+PASS: A password with no letter is refused
+PASS: A password equal to the username is refused
+PASS: Passwords that do not match are refused
+PASS: validateEmployee gives the same refusal without saving
+PASS: A refused employee leaves nothing behind (no employee and no account)
+PASS: Editing saves the new details
+PASS: An empty email is saved as no email
+PASS: The role can be changed by another administrator
+PASS: ...and the changed role takes effect at the next login
+PASS: Editing never changes the username or password
+PASS: Editing with a bad value is refused
+PASS: Editing keeps your own email without a false 'already used' error
+PASS: Editing an employee that does not exist gives a clear error
+PASS: After a reset the old password no longer works
+PASS: After a reset the new password works
+PASS: A weak new password is refused
+PASS: A new password that does not match its confirmation is refused
+PASS: ...and the password is unchanged after a refusal
+PASS: Resetting the password of an employee that does not exist gives a clear error
+PASS: A deactivated employee is hidden from the normal list
+PASS: ...but shown when deactivated employees are included
+PASS: A deactivated employee cannot log in
+PASS: The row is only hidden, not deleted
+PASS: A deactivated employee cannot be edited
+PASS: A deactivated employee's password cannot be reset
+PASS: Deactivating twice gives a clear error
+PASS: A deactivated employee's email can be used by a new employee
+PASS: Reactivating while another active employee uses the same email is refused
+PASS: A reactivated employee is listed again
+PASS: A reactivated employee can log in again
+PASS: Reactivating an employee who is already active gives a clear error
+PASS: Deactivating an employee that does not exist gives a clear error
+
+82 of 82 checks passed.
+ALL CHECKS PASSED.
+
+==================== Inventory and stock history (com.bms.service.InventoryServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: The inventory is refused when nobody is logged in
+PASS: Stock history is refused when nobody is logged in
+PASS: Adjusting stock is refused when nobody is logged in
+PASS: Employee can view the inventory
+PASS: Employee can view stock history
+PASS: Employee cannot adjust stock
+PASS: The new product is listed with its starting stock
+PASS: 10 in stock with reorder level 5 is IN STOCK
+PASS: Its history starts with the 'Initial stock' line
+PASS: Removing 5 leaves 5 and returns the new stock
+PASS: 5 in stock with reorder level 5 is LOW STOCK
+PASS: Removing the rest leaves 0
+PASS: 0 in stock is OUT OF STOCK
+PASS: Adding 20 gives 20
+PASS: 20 in stock is IN STOCK again
+PASS: The history has the 3 adjustments plus the initial stock line
+PASS: The newest change is listed first
+PASS: The reason is saved without extra spaces
+PASS: The history says who made the change
+PASS: The history adds up to the current stock
+PASS: Every history line has a date
+PASS: A change of 0 is refused
+PASS: Removing more than is in stock is refused
+PASS: A missing reason is refused
+PASS: A reason of only spaces is refused
+PASS: A reason longer than 200 characters is refused
+PASS: A reason of exactly 200 characters is accepted
+PASS: Adding more than 100000 at once is refused
+PASS: Removing more than 100000 at once is refused
+PASS: Adjusting a product that does not exist gives a clear error
+PASS: Refused changes did not change the stock
+PASS: Refused changes wrote no history lines
+PASS: Search finds the product by name
+PASS: Search finds the product by category
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character
+PASS: The 'In stock' filter lists it now (21 in stock)
+PASS: The 'Low stock' filter does not list it now
+PASS: After removing everything, the 'Out of stock' filter lists it
+PASS: ...and the 'In stock' filter does not
+PASS: Every product in the 'Out of stock' filter really has 0 in stock
+PASS: Every product in the 'Low stock' filter is at or below its reorder level, but not 0
+PASS: A deleted product disappears from the inventory
+PASS: A deleted product cannot be adjusted
+
+44 of 44 checks passed.
+ALL CHECKS PASSED.
+
+==================== Orders (create, cancel, permissions) (com.bms.service.OrderServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Orders are refused when nobody is logged in
+PASS: Order lines are refused when nobody is logged in
+PASS: Creating an order is refused when nobody is logged in
+PASS: Employee can see the currency symbol
+PASS: Employee can create an order
+PASS: The order is recorded against the logged-in employee
+PASS: The order is COMPLETED and has the customer's name
+PASS: The total is 2 x R100.00 + 1 x R25.50 = R225.50 (22550 cents)
+PASS: The order has 2 lines with the right quantities
+PASS: Each line stores the price at the time of sale
+PASS: The subtotals add up to the total
+PASS: Stock went down: widget 10 -> 8
+PASS: Stock went down: gadget 3 -> 2
+PASS: Stock history says 'Sold on order #...'
+PASS: A later price change does not change an old order
+PASS: The administrator can create an order too
+PASS: ...and it is recorded against the administrator
+PASS: The administrator sees every order
+PASS: The administrator can open any order's lines
+PASS: An employee sees their own order
+PASS: An employee does NOT see the administrator's order
+PASS: An employee cannot open the administrator's order lines
+PASS: Opening an order that does not exist gives a clear error
+PASS: Search finds an order by its number
+PASS: Search finds an order by customer name
+PASS: Search finds an order by employee name
+PASS: Search for something that does not exist finds nothing
+PASS: Searching for % is treated as a normal character
+PASS: The 'Completed' filter lists the new orders
+PASS: The 'Cancelled' filter does not list them
+PASS: Newest orders come first
+PASS: An order with no lines is refused
+PASS: A quantity of 0 is refused
+PASS: A negative quantity is refused
+PASS: More than 10000 of one product is refused
+PASS: The same product twice is refused
+PASS: More than the stock is refused (gadget has 2, asking for 3)
+PASS: The message names the product and the stock
+PASS: A customer that does not exist is refused
+PASS: A deleted customer is refused
+PASS: A product that does not exist is refused
+PASS: A order with one good line and one bad line saves NOTHING
+PASS: Refused orders changed no stock
+PASS: Refused orders created no order rows and no history rows
+PASS: Selling all remaining stock works
+PASS: ...and the product is now OUT OF STOCK
+PASS: ...so one more cannot be sold
+PASS: The stock history of the gadget adds up to its stock
+PASS: A deleted product cannot be sold
+PASS: A product on an order cannot be deleted
+PASS: A customer with orders cannot be deleted
+PASS: Before cancelling: widget 8, gadget 0
+PASS: A completed order has no cancellation info
+PASS: Employee cannot cancel an order
+PASS: ...and the order is still COMPLETED
+PASS: Administrator can cancel an order: status is now CANCELLED
+PASS: The cancelled order keeps its total and lines (records are kept)
+PASS: Stock was put back: widget 8 -> 10
+PASS: Stock was put back: gadget 0 -> 1
+PASS: The stock history says 'Order #... cancelled' with +2
+PASS: The order records who cancelled it and when
+PASS: The 'Cancelled' filter lists it
+PASS: The 'Completed' filter no longer lists it
+PASS: Cancelled orders are no longer counted as completed
+PASS: Cancelling the same order twice is refused
+PASS: ...and the stock did not change a second time
+PASS: Cancelling an order that does not exist gives a clear error
+PASS: The employee still sees her own cancelled order
+PASS: ...and the cancellation info
+PASS: An employee cannot read the cancellation info of someone else's order
+PASS: The restored stock can be sold again
+PASS: Cancelling another order restores its stock (gadget 0 -> 2)
+PASS: The gadget's history still adds up to its stock
+PASS: Cancelling the administrator's order puts the gizmos back (46 -> 50)
+PASS: A customer who only has cancelled orders still cannot be deleted (history is kept)
+
+75 of 75 checks passed.
+ALL CHECKS PASSED.
+
+==================== Reports (com.bms.service.ReportServiceCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Reports are refused when nobody is logged in
+PASS: Employee cannot run the report 'Sales by product'
+PASS: Employee cannot run the report 'Sales by employee'
+PASS: Employee cannot run the report 'Sales by customer'
+PASS: Employee cannot run the report 'Sales by day'
+PASS: Employee cannot run the report 'Stock levels and value'
+PASS: Employee cannot run the report 'Low stock (to reorder)'
+PASS: Employee cannot read the currency symbol for reports
+PASS: A valid date is accepted
+PASS: An empty date is refused
+PASS: A date in the wrong format is refused
+PASS: A date that does not exist (2020-02-30) is refused
+PASS: A 'from' date after the 'to' date is refused
+PASS: A sales report without dates is refused
+PASS: Sales by product has 2 rows
+PASS: The widget is first (higher revenue)
+PASS: Widget: 3 units, R300.00 (the cancelled order is NOT counted)
+PASS: Gadget: 4 units, R102.00
+PASS: The summary shows 3 orders, R402.00 revenue, R134.00 average, 1 cancelled
+PASS: The title names the report and the dates
+PASS: Sales by employee has 2 rows
+PASS: Thandi: 2 orders, R325.50
+PASS: The administrator: 1 order, R76.50
+PASS: Sales by customer: Alpha 2 orders R325.50, Beta 1 order R76.50
+PASS: Sales by day has 2 days (the cancelled day 2020-03-12 is not listed)
+PASS: 2020-03-10: 2 orders, R302.00
+PASS: 2020-03-20: 1 order, R100.00
+PASS: A one-day range includes both orders of that day (morning and afternoon)
+PASS: A wider range includes the April order too
+PASS: A range with no orders gives an empty report
+PASS: ...with a summary of 0 orders and R0.00
+PASS: Stock levels shows the widget: 96 in stock (100 - 2 - 1 - 1 sold; the cancelled 5 went back), R100.00, value R9,600.00
+PASS: Stock value = quantity x price for every row
+PASS: The summary stock value equals the sum of the rows
+PASS: Stock levels lists the out-of-stock test product with value R0.00
+PASS: Low stock lists the product with 2 in stock (reorder at 5)
+PASS: Low stock lists the product with 0 in stock
+PASS: Low stock does not list the well-stocked widget
+PASS: Lowest stock comes first
+PASS: Every row in the low-stock report is at or below its reorder level
+PASS: The low-stock summary counts the out-of-stock products
+PASS: CSV: first line is the title
+PASS: CSV: second line is the column headings
+PASS: CSV: money is a plain number with two decimals
+PASS: CSV: one line per row plus title and headings
+PASS: CSV: commas and quotes are escaped
+PASS: CSV: text starting with = is neutralised
+PASS: CSV: a text cell with a line break is quoted
+PASS: CSV: negative numbers stay numbers
+PASS: The file starts with the UTF-8 marker for Excel
+PASS: The file contains the same text as toCsv
+
+51 of 51 checks passed.
+ALL CHECKS PASSED.
+
+==================== Search and filtering (com.bms.service.SearchFilterCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: No dates: all three orders are found
+PASS: From 2026-01-15 hides the older order
+PASS: To 2026-01-20 includes an order made late on 20 January
+PASS: From = To = 2026-01-20 finds exactly that day's order
+PASS: A range with no orders finds none of our orders
+PASS: Dates and text combine (January + 'Beta' = only order B)
+PASS: Spaces around a date are accepted
+PASS: A date that is not a date is refused
+PASS: A day that does not exist is refused (2026-02-30)
+PASS: The wrong date format is refused (20/01/2026)
+PASS: From after To is refused
+PASS: The From message names the field
+PASS: The To message names the field
+PASS: History of customer 1 holds exactly their two orders
+PASS: History of customer 2 holds only their order
+PASS: A customer with no orders has an empty history
+PASS: History is newest first
+PASS: History can be narrowed by date as well
+PASS: A customer id that does not exist has an empty history
+PASS: A cancelled order still shows in the history, marked CANCELLED
+PASS: The Cancelled filter narrows the history
+PASS: An employee's history of a customer shows only the employee's own orders
+PASS: Date filters do not let an employee see other people's orders
+PASS: An employee's own order is found without any filter on its date
+PASS: Dates are still checked for an employee
+PASS: History is refused when nobody is logged in
+PASS: Date search is refused when nobody is logged in
+PASS: Products: 'All' lists all three test products
+PASS: Products: 'Out of stock' finds only the empty one
+PASS: Products: 'Low stock' finds only the one at or below its reorder level
+PASS: Products: 'In stock' finds only the well-stocked one
+PASS: Products: a null stock filter means all
+PASS: Products: the old two-argument search still works
+PASS: Products: the stock label on each row matches the filter
+PASS: Products: stock filter and text combine
+PASS: Products: stock filter agrees with the Inventory tab
+PASS: Products: filtered search is refused when nobody is logged in
+PASS: Departments: each department appears once, capital letters ignored
+PASS: Departments: the other test department is listed
+PASS: Departments: the list is alphabetical
+PASS: Department filter finds both people of that department (capitals ignored)
+PASS: Department filter excludes other departments
+PASS: Department and text combine
+PASS: A null or blank department means everyone
+PASS: A department nobody is in finds nothing
+PASS: The old two-argument search still works
+PASS: Searching for % in a department is not a wildcard
+PASS: A deactivated employee is hidden from the department filter by default
+PASS: ...and shown when 'show deactivated' is on
+PASS: An employee cannot list departments
+PASS: An employee cannot search employees by department
+
+51 of 51 checks passed.
+ALL CHECKS PASSED.
+
+==================== Validation and error handling (com.bms.service.ErrorHandlingCheck) ====================
+Oct 08, 2026 8:19:29 PM com.bms.util.AppLogging start
+INFO: Logging started. File: C:\Users\kgaog\OneDrive\Documents\NetBeansProjects\business-management-system\logs\bms.0.log
+PASS: The log file can be started
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: Customer first name [Bob\nSmith] is refused
+PASS: Customer first name [Tab\tName] is refused
+PASS: Customer first name [Nul\0l] is refused
+PASS: Customer first name [Evil\u202Ename] is refused
+PASS: Customer first name [Zero\u200Bwidth] is refused
+PASS: Customer first name [Be\all] is refused
+PASS: A control character at the very end is simply trimmed away (like spaces)
+PASS: Customer last name with a line break is refused
+PASS: The message names the field
+PASS: Customer address with a line break is refused
+PASS: Nothing was saved by the refused customers (only the trimmed one exists)
+PASS: Accented letters are accepted
+PASS: A name that looks like SQL is accepted as plain text
+PASS: ...it is stored exactly as typed
+PASS: ...and the customers table is still there
+PASS: Supplier name with a line break is refused
+PASS: Supplier contact person with a tab is refused
+PASS: Supplier address with a NUL is refused
+PASS: A normal supplier is accepted
+PASS: Product name with a line break is refused
+PASS: Product category with a tab is refused
+PASS: Product description with a NUL is refused
+PASS: A product description MAY have line breaks
+PASS: ...and the line break is kept
+PASS: Employee position with a line break is refused
+PASS: Employee department with a tab is refused
+PASS: A normal employee is accepted
+PASS: Stock reason with a line break is refused
+PASS: A normal stock reason is accepted
+PASS: Unrecognised problem: just the base message
+PASS: Locked: tells the user to close the other program
+PASS: Locked (other wording)
+PASS: Read-only file
+PASS: Disk full
+PASS: Damaged file
+PASS: Not a database
+PASS: Cannot open the file
+PASS: The cause inside another exception is found too
+PASS: Data folder cannot be created
+PASS: Every hint keeps the base message first
+Oct 08, 2026 8:19:33 PM com.bms.service.AuthService login
+SEVERE: Database error during login
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at com.bms.dao.UserDao.findByUsername(UserDao.java:20)
+	at com.bms.service.AuthService.login(AuthService.java:45)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$14(ErrorHandlingCheck.java:136)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:136)
+
+PASS: Login while the database is locked gives a DatabaseException
+PASS: ...with a friendly message
+PASS: ...that says what to do
+PASS: ...and nobody is logged in
+Oct 08, 2026 8:19:36 PM com.bms.service.CustomerService databaseProblem
+SEVERE: Database error while searching customers
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at com.bms.dao.CustomerDao.search(CustomerDao.java:34)
+	at com.bms.service.CustomerService.search(CustomerService.java:37)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$15(ErrorHandlingCheck.java:151)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:151)
+
+PASS: Customer search while locked: friendly DatabaseException
+Oct 08, 2026 8:19:40 PM com.bms.service.OrderService databaseProblem
+SEVERE: Database error while loading orders
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at com.bms.dao.OrderDao.search(OrderDao.java:52)
+	at com.bms.service.OrderService.search(OrderService.java:100)
+	at com.bms.service.OrderService.search(OrderService.java:75)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$16(ErrorHandlingCheck.java:153)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:153)
+
+PASS: Order search while locked: friendly DatabaseException
+Oct 08, 2026 8:19:43 PM com.bms.service.DashboardService getSummary
+SEVERE: Database error while loading the dashboard
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at com.bms.dao.SettingDao.getValue(SettingDao.java:16)
+	at com.bms.service.DashboardService.getSummary(DashboardService.java:34)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$17(ErrorHandlingCheck.java:155)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:155)
+
+PASS: Dashboard while locked: friendly DatabaseException
+Oct 08, 2026 8:19:46 PM com.bms.service.ReportService databaseProblem
+SEVERE: Database error while loading settings
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at com.bms.dao.SettingDao.getValue(SettingDao.java:16)
+	at com.bms.service.ReportService.getCurrencySymbol(ReportService.java:77)
+	at com.bms.service.ReportService.run(ReportService.java:97)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$18(ErrorHandlingCheck.java:157)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:157)
+
+PASS: Report while locked: friendly DatabaseException
+Oct 08, 2026 8:19:49 PM com.bms.service.CustomerService databaseProblem
+SEVERE: Database error while adding a customer
+org.sqlite.SQLiteException: [SQLITE_BUSY] The database file is locked (database is locked)
+	at org.sqlite.core.DB.newSQLException(DB.java:1179)
+	at org.sqlite.core.DB.newSQLException(DB.java:1190)
+	at org.sqlite.core.DB.throwex(DB.java:1150)
+	at org.sqlite.core.NativeDB.prepare_utf8(Native Method)
+	at org.sqlite.core.NativeDB.prepare(NativeDB.java:132)
+	at org.sqlite.core.DB.prepare(DB.java:264)
+	at org.sqlite.core.CorePreparedStatement.<init>(CorePreparedStatement.java:46)
+	at org.sqlite.jdbc3.JDBC3PreparedStatement.<init>(JDBC3PreparedStatement.java:32)
+	at org.sqlite.jdbc4.JDBC4PreparedStatement.<init>(JDBC4PreparedStatement.java:25)
+	at org.sqlite.jdbc4.JDBC4Connection.prepareStatement(JDBC4Connection.java:34)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:225)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:205)
+	at org.sqlite.jdbc3.JDBC3Connection.prepareStatement(JDBC3Connection.java:210)
+	at com.bms.dao.CustomerDao.insert(CustomerDao.java:64)
+	at com.bms.service.CustomerService.add(CustomerService.java:66)
+	at com.bms.service.ErrorHandlingCheck.addCustomer(ErrorHandlingCheck.java:250)
+	at com.bms.service.ErrorHandlingCheck.lambda$main$19(ErrorHandlingCheck.java:159)
+	at com.bms.service.ErrorHandlingCheck.errorOf(ErrorHandlingCheck.java:221)
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:159)
+
+PASS: Saving a customer while locked: friendly DatabaseException
+PASS: The refused save left nothing behind
+PASS: After the lock is released the same search works again
+PASS: ...and saving works again
+Oct 08, 2026 8:19:49 PM com.bms.util.AppErrors report
+SEVERE: Unexpected error
+java.lang.IllegalStateException: boom-check
+	at com.bms.service.ErrorHandlingCheck.main(ErrorHandlingCheck.java:179)
+
+PASS: The log file exists
+PASS: The log recorded the locked-database problems
+PASS: The log keeps the technical detail (stack trace)
+PASS: The log recorded the unexpected error
+PASS: The log never contains the password that was typed
+PASS: The safety net is installed after AppErrors.install()
+
+59 of 59 checks passed.
+ALL CHECKS PASSED.
+
+==================== Volume and speed (thousands of rows) (com.bms.service.VolumeCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+INFO: Seeded 3000 customers, 1500 products and 1300 orders in 117 ms
+PASS: The list limit is 1000
+INFO: Orders list (all): 22 ms
+PASS: Orders list (all) is not slow (under 3000 ms)
+PASS: The orders list is cut at exactly the limit (1000 of 1303)
+PASS: ...and it holds the NEWEST orders first
+INFO: Orders search by customer name: 15 ms
+PASS: Orders search by customer name is not slow (under 3000 ms)
+PASS: A search with more matches than the limit is also cut at the limit
+INFO: Customer history (1300 orders): 9 ms
+PASS: Customer history (1300 orders) is not slow (under 3000 ms)
+PASS: A customer's history is cut at the limit too
+INFO: Orders for one day: 5 ms
+PASS: Orders for one day is not slow (under 3000 ms)
+PASS: Narrowing by date gives a list below the limit (so nothing is hidden)
+PASS: ...and every order found really is from that day
+PASS: ...and the number matches the database (15)
+INFO: Customer list (all): 20 ms
+PASS: Customer list (all) is not slow (under 3000 ms)
+PASS: Every test customer appears in the customer list (no limit on customers)
+INFO: Customer search: 20 ms
+PASS: Customer search is not slow (under 3000 ms)
+PASS: A customer search finds all 3000 test customers
+INFO: Product list (all): 12 ms
+PASS: Product list (all) is not slow (under 3000 ms)
+PASS: Every test product appears in the product list
+INFO: Product search with stock filter: 3 ms
+PASS: Product search with stock filter is not slow (under 3000 ms)
+PASS: The stock filter agrees with the stock numbers
+INFO: Inventory list: 9 ms
+PASS: Inventory list is not slow (under 3000 ms)
+PASS: The inventory list shows every test product
+INFO: Dashboard: 28 ms
+PASS: Dashboard is not slow (under 3000 ms)
+PASS: The dashboard counts ALL orders (not just the first 1000)
+PASS: The dashboard counts all new customers
+PASS: The dashboard counts all new products
+INFO: Report: sales by customer: 37 ms
+PASS: Report: sales by customer is not slow (under 3000 ms)
+PASS: The sales-by-customer report includes the heavy customer
+PASS: The report counts ALL 1300 orders of that customer (not just the newest 1000)
+PASS: The report's revenue for that customer matches the database (11245000 cents)
+INFO: Report: sales by product: 14 ms
+PASS: Report: sales by product is not slow (under 3000 ms)
+PASS: The sales-by-product report lists many products
+INFO: Report: stock levels: 13 ms
+PASS: Report: stock levels is not slow (under 3000 ms)
+PASS: The stock report lists every product
+INFO: Report: sales by day: 6 ms
+PASS: Report: sales by day is not slow (under 3000 ms)
+INFO: Report: low stock: 8 ms
+PASS: Report: low stock is not slow (under 3000 ms)
+
+36 of 36 checks passed.
+ALL CHECKS PASSED.
+
+==================== Data integrity of the whole database (com.bms.service.DataIntegrityCheck) ====================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.sqlite.SQLiteJDBCLoader in an unnamed module (file:/C:/Users/kgaog/.m2/repository/org/xerial/sqlite-jdbc/3.45.3.0/sqlite-jdbc-3.45.3.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+PASS: SQLite's own integrity check says 'ok'
+PASS: Every foreign key points at a row that exists
+PASS: Foreign keys are switched ON for our connections
+PASS: No product has negative stock
+PASS: No product has a negative price
+PASS: The stock status in the inventory view matches the numbers
+PASS: Every stock history line has a reason and a real change
+PASS: Every order has at least one product line
+PASS: Every order's total equals the sum of its lines
+PASS: Every line's subtotal equals quantity x price
+PASS: Every line has a quantity above zero
+PASS: Cancelled orders say when and by whom; completed orders do not
+PASS: Every order belongs to a customer and an employee that exist
+PASS: Every order that was sold through the screens has a matching 'Sold on order' line for each product
+PASS: Every cancelled order that has sale history also has the stock put back
+PASS: At least one active administrator exists
+PASS: Every password is stored as a hash with a salt (never as plain text)
+PASS: No two users share the same salt (each password is salted separately)
+PASS: Every active login belongs to an employee record that exists and is active, or has none
+PASS: The currency symbol setting exists and is not blank
+PASS: The default low-stock level is a whole number above zero
+INFO: 1 product(s) have stock but no stock history (normal for data loaded before stock history existed).
+INFO: 3 product(s) whose stock history does not add up to the stock (normal for older demo data; should be 0 for data made on a fresh database).
+INFO: 6 customers, 6 products, 3 orders, 2 users in the database.
+
+21 of 21 checks passed.
+ALL CHECKS PASSED.
+
