@@ -1,0 +1,18 @@
+# Build output
+target/
+
+# Runtime files created when the app runs (your data must never be public)
+data/
+logs/
+
+# NetBeans / IDE files
+nbproject/private/
+nbactions.xml
+.idea/
+.vscode/
+*.iml
+
+# Operating system files
+Thumbs.db
+Desktop.ini
+.DS_Store
