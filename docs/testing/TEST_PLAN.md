@@ -60,7 +60,7 @@ Status values: Pass / Fail / Not run. Leave blank until you have run the case.
 | T14 | Customers | Search | Type part of a name | Table shows only matching customers | | |
 | T15 | Customers | Delete customer with orders | Select a customer that has orders, Delete | "This customer has N order(s) and cannot be deleted. Their order history must be kept." | | |
 | T16 | Customers | Order history | Select a customer, Order history | Dialog lists that customer's orders and totals | | |
-| T17 | Customers | Export CSV | Export | CSV file opens in Excel with the same rows; cells starting with = + - @ are neutralised | | |
+| T17 | Reports (admin) | Export a report to CSV | Run "Stock levels and value", click Export to CSV, save, open in Excel | File has the same columns and rows as the screen; cells starting with = + - @ are neutralised | | |
 
 ### 4.3 Products and suppliers
 
@@ -113,7 +113,7 @@ Status values: Pass / Fail / Not run. Leave blank until you have run the case.
 | Test ID | Feature | Test Case | Input | Expected | Actual | Status |
 |---|---|---|---|---|---|---|
 | T44 | Dashboard | Totals update | Create an order, open Dashboard tab | Dashboard figures change without restarting | | |
-| T45 | Reports (admin) | Open Reports | Click Reports tab | Sales, stock and customer reports show numbers that match the other tabs | | |
+| T45 | Reports (admin) | Run each report | Choose each of the 6 reports (dates for the sales ones) and Run report | Sales by product/employee/customer/day, Stock levels and value, and Low stock all show numbers that match the other tabs | | |
 | T46 | Validation | Hidden characters | Paste text containing a line break into First name | "The first name contains characters that are not allowed (such as line breaks, tabs or hidden characters)." | | |
 | T47 | Errors | Locked database | Keep an unsaved-then-written edit locked in DB Browser, then use the app | Friendly message mentioning the database is being used by another program; no crash | | |
 | T48 | Errors | Log file | After T47 open `logs/bms.0.log` | Technical detail is logged; no password appears | | |
